@@ -30,7 +30,7 @@ TODO
 
 </details>
 
-### Ignore padding but crop to 1:1 resolution (when "Only masked")
+### Align mask on VAE squares (for exact latents positions, 8*8)
 It will sharpen the mask, getting rid of semi-transparent areas. You will see actual latent squares, which means:
 - The mask border will be rough, with much more visible seam
 - Mask blurring will be ignored (but applied before rounding the mask)
@@ -45,7 +45,7 @@ TODO
 
 </details>
 
-### When "Only masked", ignore padding but crop to 1:1 resolution
+### Ignore padding but crop to 1:1 resolution (when "Only masked")
 It will drop your "Only masked padding, pixels" value, but calculate inpainting region so that inpaint window will be exactly width\*height pixels, centered around the masked area. Which means:
 - You won't get high-quality image downscaled and pasted into your region
 - Some parts of a very large mask might be left out-of-bounds
