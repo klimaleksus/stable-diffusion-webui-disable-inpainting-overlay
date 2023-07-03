@@ -1,6 +1,8 @@
+### Discussion: `https://github.com/AUTOMATIC1111/stable-diffusion-webui/discussions/TODO`
+
 # disable-inpainting-overlay
 
-This is experimental Extension for [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for having more control over inpainting.
+This is WIP Extension for [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for having more control over inpainting.
 
 ## Installation:
 Copy the link to this repository into `Extension index URL` in WebUI Extensions tab:
@@ -22,7 +24,13 @@ It will save to final result the same image that you may see in preview during g
 Why you may need this? In case if you want to manually put your inpainting result to a top layer in photoshop to erase its outer area by yourself. This way you will get much more freedom, compared to just a tiny blurred border of the mask otherwise.  
 Use this ONLY when you plan to composite your inpainting manually!
 
-### Align mask on VAE squares (for exact latents positions, 8*8)
+<details><summary>Example!</summary>
+  
+TODO
+
+</details>
+
+### Ignore padding but crop to 1:1 resolution (when "Only masked")
 It will sharpen the mask, getting rid of semi-transparent areas. You will see actual latent squares, which means:
 - The mask border will be rough, with much more visible seam
 - Mask blurring will be ignored (but applied before rounding the mask)
@@ -30,6 +38,12 @@ It will sharpen the mask, getting rid of semi-transparent areas. You will see ac
 
 Why you may need this? Probably in case when you want to refine your inpainted contents sequentially, by sending your best result back to inpaint with the same mask again and again, but without blurring/destroying the area around mask edges (that often becomes visible otherwise).  
 There is no reason to use this mode together with previous (because the previous one is generally better since you will then work manually anyway).
+
+<details><summary>Example!</summary>
+  
+TODO
+
+</details>
 
 ### When "Only masked", ignore padding but crop to 1:1 resolution
 It will drop your "Only masked padding, pixels" value, but calculate inpainting region so that inpaint window will be exactly width\*height pixels, centered around the masked area. Which means:
@@ -39,6 +53,12 @@ It will drop your "Only masked padding, pixels" value, but calculate inpainting 
 
 Why you may need this? In cases when you already upscaled your image large enough that inpainting at native resolution is feasible, but you don't want to crop the area manually, nor you want to calculate or pick-up the value of padding yourself.  
 To see the target area exactly, set the first checkbox here ("Disable inpainting overlay") too.
+
+<details><summary>Example!</summary>
+  
+TODO
+
+</details>
 
 This extension does not add anything to generation info.
 ## EOF
