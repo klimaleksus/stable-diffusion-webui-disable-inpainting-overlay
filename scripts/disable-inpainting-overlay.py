@@ -2,7 +2,7 @@
 
 import cv2
 import PIL
-import numpy
+import numpy as np
 import gradio as gr
 from modules import scripts
 import modules.masking as masking
@@ -20,13 +20,17 @@ class DisableInpaintingOverlay(scripts.Script):
             with gr.Row():
                 gr_disable = gr.Checkbox(False,label='Disable inpainting overlay (leave picture from U-Net as-is)')
                 gr_align = gr.Checkbox(False,label='Align mask on VAE squares (for exact latents positions, 8*8)')
-                gr_masked = gr.Checkbox(False,label='When "Only masked", ignore padding but crop to 1:1 resolution')
+                gr_masked = gr.Checkbox(False,label='Ignore padding but crop to 1:1 resolution (when "Only masked")')
         return [gr_disable,gr_align,gr_masked]
     def before_process(self,p,gr_disable,gr_align,gr_masked):
-        if (not gr_disable) and (not gr_align):
+        if (not gr_disable) and (not gr_align) and (not gr_masked):
             return
         if gr_align and hasattr(p,'image_mask'):
-            np_mask = numpy.array(p.image_mask)
+            image_mask = p.image_mask.convert('L')
+            if p.inpainting_mask_invert:
+                image_mask = PIL.ImageOps.invert(image_mask)
+                p.inpainting_mask_invert = False
+            np_mask = np.array(image_mask)
             if p.mask_blur_x > 0:
                 kernel_size = 2 * int(4 * p.mask_blur_x + 0.5) + 1
                 np_mask = cv2.GaussianBlur(np_mask, (kernel_size, 1), p.mask_blur_x)
@@ -39,14 +43,23 @@ class DisableInpaintingOverlay(scripts.Script):
             mult = 8
             width = np_mask.shape[1]//mult
             height = np_mask.shape[0]//mult
-            for y in range(height):
-                y1 = y*mult
-                y2 = (y+1)*mult
-                for x in range(width):
-                    x1 = x*mult
-                    x2 = (x+1)*mult
-                    np_mask[y1:y2,x1:x2] = 255 if np_mask[y1:y2,x1:x2].max()>127 else 0
-            p.image_mask = PIL.Image.fromarray(np_mask)
+            if False:
+                latmask = PIL.Image.fromarray(np_mask)
+                latmask = latmask.convert('RGB').resize((width,height))
+                latmask = np.array(latmask,dtype=np.float32)
+                latmask = np.around(latmask/255)*255
+                latmask = latmask.astype(np.uint8)
+                latmask = PIL.Image.fromarray(latmask)
+                p.image_mask = latmask.convert('RGB').resize((width*8,height*8),0)
+            else:
+                for y in range(height):
+                    y1 = y*mult
+                    y2 = (y+1)*mult
+                    for x in range(width):
+                        x1 = x*mult
+                        x2 = (x+1)*mult
+                        np_mask[y1:y2,x1:x2] = 255 if np_mask[y1:y2,x1:x2].max()>127 else 0
+                p.image_mask = PIL.Image.fromarray(np_mask).convert('RGB')
         if gr_disable and (not hasattr(processing.apply_overlay,'_DisableInpaintingOverlay')):
                 if hasattr(processing.apply_overlay,'_DisableInpaintingOverlay'):
                     processing.apply_overlay = getattr(processing.apply_overlay,'_DisableInpaintingOverlay')
