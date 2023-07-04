@@ -1,4 +1,4 @@
-### Discussion: `https://github.com/AUTOMATIC1111/stable-diffusion-webui/discussions/TODO`
+### Discussion: https://github.com/AUTOMATIC1111/stable-diffusion-webui/discussions/11612
 
 # disable-inpainting-overlay
 
