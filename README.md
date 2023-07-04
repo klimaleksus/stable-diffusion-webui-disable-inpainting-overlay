@@ -2,7 +2,7 @@
 
 # disable-inpainting-overlay
 
-This is WIP Extension for [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for having more control over inpainting.
+This is Extension for [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) for having more control over inpainting.
 
 ## Installation:
 Copy the link to this repository into `Extension index URL` in WebUI Extensions tab:
