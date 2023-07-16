@@ -22,7 +22,7 @@ class DisableInpaintingOverlay(scripts.Script):
                 gr_align = gr.Checkbox(False,label='Align mask on VAE squares (for exact latents positions, 8*8)')
                 gr_masked = gr.Checkbox(False,label='Ignore padding but crop to 1:1 resolution (when "Only masked")')
         return [gr_disable,gr_align,gr_masked]
-    def before_process(self,p,gr_disable,gr_align,gr_masked):
+    def before_process(self,p,gr_disable=False,gr_align=False,gr_masked=False):
         if (not gr_disable) and (not gr_align) and (not gr_masked):
             return
         if gr_align and hasattr(p,'image_mask'):
